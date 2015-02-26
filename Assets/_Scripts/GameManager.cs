@@ -4,7 +4,7 @@ using System.Collections;
 public class GameManager : MonoBehaviour {
 	public GameObject gameplay;
 	//public static timer text
-	public bool gameRunning = false;
+	public static bool gameRunning = true;
 	
 	// Use this for initialization
 	void Start () {

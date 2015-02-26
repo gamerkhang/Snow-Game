@@ -16,55 +16,54 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		//remember to do input strings by making it "_____" + playerNumber!
-		//if (Input.GetButton(playerNumberStr + "Pause"))
-		//if input is pause, pause game
-		//only allow movement and actions if player's health > 0
-		//if not holding a snowball and input registered, make snowball (should be able to make ones that grow in size
-		//  over time as they hold down the button)
-		//if holding snowball and input registered, throw it (remember, they should be able to hold their throw)
-		if (Input.GetButtonDown(playerNumberStr + "StopMoving"))
-			canMove = false;
-		if (Input.GetButtonUp(playerNumberStr + "StopMoving"))
-			canMove = true;
-
-		float x, y;
-
-		if (canMove)
+		if (GameManager.gameRunning)
 		{
-			x = Input.GetAxis(playerNumberStr + "MoveX");
-			y = Input.GetAxis(playerNumberStr + "MoveY");
-			Move (x, y);
+			//remember to do input strings by making it "_____" + playerNumber!
+			//if (Input.GetButton(playerNumberStr + "Pause"))
+			//if input is pause, pause game
+			//only allow movement and actions if player's health > 0
+			//if not holding a snowball and input registered, make snowball (should be able to make ones that grow in size
+			//  over time as they hold down the button)
+			//if holding snowball and input registered, throw it (remember, they should be able to hold their throw)
+			if (Input.GetButtonDown(playerNumberStr + "StopMoving"))
+				canMove = false;
+			if (Input.GetButtonUp(playerNumberStr + "StopMoving"))
+				canMove = true;
+
+			float x, y;
+
+			if (canMove)
+			{
+				x = Input.GetAxis(playerNumberStr + "MoveX");
+				y = Input.GetAxis(playerNumberStr + "MoveY");
+				Debug.Log (x + " " + y);
+				Move (x, -y);  //don't quite know why it's inverted yet.
+			}
+
+			x = Input.GetAxis(playerNumberStr + "LookX");
+			y = Input.GetAxis(playerNumberStr + "LookY");
+			Rotate (x, y);
+
+			//if (Input.GetButtonDown ())
+
+			//push cancelling off to another time if you really need to since it seems tough to negate all the actions?
+			//   not sure
+
 		}
-
-		x = Input.GetAxis(playerNumberStr + "LookX");
-		y = Input.GetAxis(playerNumberStr + "LookY");
-		Rotate (x, y);
-
-		//if (Input.GetButtonDown ())
-
-		//push cancelling off to another time if you really need to since it seems tough to negate all the actions?
-		//   not sure
 	}
 
 	void Move (float x, float y) {
 		float displace = speed * Time.deltaTime;
-		float xComp = x * displace;
-		float yComp = y * displace;
+		x *= displace;
+		y *= displace;
 
-		if(x != 0 && y != 0)
-		{
-			xComp = xComp * Mathf.Sqrt(2)/2;
-			yComp = yComp * Mathf.Sqrt(2)/2;
-			
-		}
-
-		Vector2 velocity = new Vector2(xComp,yComp);
-		//rigidbody2D.MovePosition((Vector2)transform.position + velocity);
+		Vector2 velocity = new Vector2(x,y);
+		this.rigidbody2D.MovePosition((Vector2)this.transform.position + velocity);
 	}
 
 	void Rotate (float x, float y) {
-
+		//how do you map these numbers to the guy's z rotation? (1, 1) would be like -45 degrees... (0, 1) would be 0,
+		//Mathf.atan(y/x)
 	}
 
 	//registerHit, called by a snowball projectile that hits the player, causes player's health to decrement.
