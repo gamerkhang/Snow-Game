@@ -6,6 +6,7 @@ public class Player : MonoBehaviour {
 	public string playerNumberStr;
 	public int health = 100;
 	public int speed = 130;
+	public int rotationSpeed = 50;
 	public bool holdingSnowball = false;
 	public bool canMove = true;
 
@@ -36,7 +37,6 @@ public class Player : MonoBehaviour {
 			{
 				x = Input.GetAxis(playerNumberStr + "MoveX");
 				y = Input.GetAxis(playerNumberStr + "MoveY");
-				Debug.Log (x + " " + y);
 				Move (x, -y);  //don't quite know why it's inverted yet.
 			}
 
@@ -62,8 +62,22 @@ public class Player : MonoBehaviour {
 	}
 
 	void Rotate (float x, float y) {
-		//how do you map these numbers to the guy's z rotation? (1, 1) would be like -45 degrees... (0, 1) would be 0,
-		//Mathf.atan(y/x)
+
+//		//how do you map these numbers to the guy's z rotation? (1, 1) would be like -45 degrees... (0, 1) would be 0,
+//		if (x == 0)
+//
+//		float angle = Mathf.Rad2Deg * Mathf.Atan(y/x) + 90f;
+//		Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
+//		transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * rotationSpeed);
+		if (x == 0 && y == 0)
+			return;
+		else
+		{
+			float angle = Mathf.Atan2(-x, -y) * Mathf.Rad2Deg;
+			//put in code that makes him turn around more slowly
+
+			transform.rotation = Quaternion.Euler(0f,0f, angle);
+		}
 	}
 
 	//registerHit, called by a snowball projectile that hits the player, causes player's health to decrement.
